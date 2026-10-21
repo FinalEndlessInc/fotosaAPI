@@ -1,0 +1,192 @@
+@font-face {
+    font-family: "Next Sunday";
+    src: url("../font/Next\ Sunday.otf");
+}
+
+*{
+    padding: 0px;
+    margin: 0px;
+}
+
+a{
+    color: white;
+    text-decoration: none;
+}
+
+a:hover{
+    color: #30A2F5;
+}
+
+body{
+    background-color: #101014;
+    color: white;
+    font-family: "Next Sunday";
+}
+
+nav{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: calc(100% - 160px);
+    background-color: #32407E;
+    padding: 5px;
+    padding-left: 80px;
+    padding-right: 80px;
+    height: 40px;
+    z-index: 4;
+    filter: drop-shadow(0px 10px 4px rgba(0, 0, 0, 0.4));
+}
+
+#logo{
+    float: left;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    height: 40px;
+}
+
+#logo:hover{
+    color: #30A2F5;
+    cursor: pointer;
+}
+
+/* Cuenta Iniciada */
+
+#SeccionSesionIniciada{
+    min-width: 200px;
+    position: relative;
+    float: right;
+    
+    /* ---------------------------------------------------------------------------------------- Sesión Iniciada ------------- */
+    display: none;
+}
+
+@media (max-width: 600px) {
+    #SeccionSesionIniciada{
+        width: calc(100% - 40px);
+        padding: 20px;
+        background-color: #101014;
+    }
+}
+
+#SeccionSesionIniciada:hover{
+    cursor: pointer;
+}
+
+#TextoMiPerfil{
+    float: right;
+    height: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+#SeccionSesionIniciada img{
+    float: right;
+    margin-top: 2px;
+    width: 35px;
+    height: 35px;
+    margin-left: 20px;
+}
+
+#ListaDesplegable{
+    position: absolute;
+    float: left;
+    top: 40px;
+    right: 0px;
+    background-color: red;
+    display: none;
+}
+
+#SeccionSesionIniciada:hover #ListaDesplegable{
+    display: block;
+    background-color: black;
+}
+
+#ListaDesplegable ul{
+    list-style-type: none;
+}
+
+#ListaDesplegable li{
+    padding: 10px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+#ListaDesplegable li:hover{
+    background-color: #30A2F5;
+    color: black;
+}
+
+/* Iniciar sesión */
+#SeccionIniciarSesion{
+    float: right;
+    height: 40px;
+    font-size: 18px;
+
+    /* ---------------------------------------------------------------------------------------- Iniciar Sesión -------------- */
+    /*display: none;*/
+}
+
+@media (max-width: 1550px) {
+    #SeccionIniciarSesion{
+        width: calc(100% - 40px);
+        background-color: #101014;
+        height: auto;
+        padding: 20px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+}
+
+#IniciarSesionBotones{
+    float: right;
+    /*background-color: red;*/
+}
+
+@media (max-width: 1250px) {
+    #IniciarSesionBotones{
+        margin-top: 20px;
+        width: 100%;
+    }
+}
+
+#SeccionIniciarSesion button{
+    padding: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 16px;
+    border: none;
+    height: 32px;
+}
+
+#SeccionIniciarSesion button:hover{
+    background-color: #30A2F5;
+    cursor: pointer;
+}
+
+#SeccionIniciarSesion input{
+    padding: 5px;
+    font-size: 16px;
+    height: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#CentradorSitio{
+    float: left;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.CampoCentrado{
+    display: flex;
+    justify-content: center;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

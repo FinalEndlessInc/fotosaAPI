@@ -1,0 +1,83 @@
+#ContenidoMuro{
+    margin-top: 140px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin-bottom: 100px;
+    float: left;
+    width: 1200px;
+    background-color: #0B0A0E;
+}
+
+.elemento_centrado{
+    float: left;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#TituloMuro{
+    float: left;
+    font-size: 48px;
+}
+
+#ImagenPerfilMuro{
+    max-width: 400px;
+    margin-bottom: 100px;
+}
+
+.ElementoImagen{
+    float: left;
+    width: calc(25% - 20px);
+    margin: 10px;
+    aspect-ratio: 1/1;
+    background-image: url('../img/PlantillaFoto.png');
+    background-size: cover;
+    background-position: center;
+}
+
+#ColeccionImagenes{
+    float: left;
+    width: 100%;
+}
+
+/* Sección Agregar Foto */
+#SeccionAgregarFoto{
+    float: left;
+    width: calc(100% - 200px);
+    height: auto;
+    background-color: #101014;
+
+    padding: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-bottom: 100px;
+
+    display: none;
+}
+
+#SeccionAgregarFoto div{
+    float: left;
+    width: 100%;
+    font-size: 34px;
+    margin-bottom: 20px;
+}
+#Campo_SubirNuevaFoto{
+    float: left;
+    width: 100%;
+}
+#Preview_SubirNuevaFoto{
+    float: left;
+    min-width: 100px;
+    min-height: 100px;
+}
+#SeccionAgregarFoto button{
+    float: left;
+    padding: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border: none;
+}
+#SeccionAgregarFoto button:hover{
+    cursor: pointer;
+    background-color: #30A2F5;
+}

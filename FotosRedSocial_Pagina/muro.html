@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/muro.css">
+    <title>Fotos Red Social</title>
+</head>
+
+<body>
+    <nav>
+        <div id="logo">
+            <a href="index.html">
+                Fotos Red Social
+            </a>
+        </div>
+        <!-- Cuenta iniciada -->
+        <div id="SeccionSesionIniciada">
+            <img src="img/PlantillaPerfil.png" />
+            <div id="TextoMiPerfil">
+                [Nombre del usuario] 
+            </div>
+            <div id="ListaDesplegable">
+                <ul>
+                    <li id="BotonVerMiPerfil">Ver mi Muro</li>
+                    <li>Cerrar sesión</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Iniciar sesión -->
+        <div id="SeccionIniciarSesion">
+            Usuario o Correo:
+            <input type="text" id="Input_Usuario"/>
+            Contraseña:
+            <input type="password" id="Input_Contrasena"/>
+            <div id="IniciarSesionBotones">
+                <button>Iniciar Sesión</button>
+                <button>Registrarse</button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="CentradorSitio">
+        <div id="ContenidoMuro">
+            
+            <div id="SeccionAgregarFoto">
+                <div>Agregar Nueva Foto</div>
+                <input type="file" id="Campo_SubirNuevaFoto">
+                <div class="CampoCentrado">
+                    <img id="Preview_SubirNuevaFoto">
+                </div>
+                <button>Subir Foto</button>
+            </div>
+
+            <div class="elemento_centrado">
+                <div id="TituloMuro"> Muro de [Usuario]</div>
+            </div>
+            <div class="elemento_centrado">
+                <img id="ImagenPerfilMuro" src="img/PlantillaPerfil.png" />
+            </div>
+
+            <div id="ColeccionImagenes">
+                <div class="ElementoImagen"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
