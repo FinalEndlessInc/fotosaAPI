@@ -41,7 +41,7 @@ const server = http.createServer((request, response) => {
                 default:
                     if(request.url.startsWith("/obtener_perfil_")){
                         const id = request.url.replace("/obtener_perfil_", "");
-                        mysql.query("SELECT nombre, imagen FROM usuarios WHERE id = " + id, (err, respuesta) => {
+                        mysql.query("SELECT nombre, imagen, fondo, fondo_cover FROM usuarios WHERE id = " + id, (err, respuesta) => {
                             if(err){
                                 console.log(err);
                                 response.statusCode = 404;
@@ -65,7 +65,9 @@ const server = http.createServer((request, response) => {
                             
                             const perfil = {
                                 nombre: respuesta[0].nombre,
-                                imagen: "data:;base64," + respuesta[0].imagen.toString("base64")
+                                imagen: "data:;base64," + respuesta[0].imagen.toString("base64"),
+                                fondo: "data:;base64," + respuesta[0].fondo.toString("base64"),
+                                fondo_cover: respuesta[0].fondo_cover
                             }
 
                             response.statusCode = 200;
@@ -73,7 +75,38 @@ const server = http.createServer((request, response) => {
                             response.end(JSON.stringify(perfil));
                             mysql.end();
                         });
-                    }               
+                    }
+                    else if(request.url.startsWith("/obtener_id_fotos_")){
+                        const id = request.url.replace("/obtener_id_fotos_", "");
+                        
+                        mysql.query("SELECT id FROM `fotos` WHERE id_usuario = " + id, (err, resultado) => {
+                            if(err){
+                                console.log(err);
+                                mysql.end();
+
+                                response.statusCode = 400;
+                                response.setHeader('Content-Type', 'application/json');
+                                response.end(JSON.stringify({
+                                    mensaje: "No existe un usuario con ese id"
+                                }));
+
+                                return;
+                            }
+                            console.log(resultado);
+
+                            const ids_fotos = {
+                                "ids": []
+                            }
+
+                            for(i = 0; i < resultado.length; i++){
+                                ids_fotos.ids.push(resultado[i].id)
+                            }
+                            response.statusCode = 200;
+                            response.setHeader('Content-Type', 'application/json');
+                            response.end(JSON.stringify(ids_fotos));
+                            mysql.end();
+                        })
+                    }            
                 break;
             }
             
