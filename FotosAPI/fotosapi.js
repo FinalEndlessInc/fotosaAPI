@@ -1,5 +1,8 @@
 const http = require("node:http");
 const basesdatos= require("mysql");
+const jwt = require("jsonwebtoken");
+
+const llave = "jskmfhjn9j2hf90awepoaaeffgksbyfevgbxm";
 
 const puerto = 3000;
 
@@ -92,7 +95,6 @@ const server = http.createServer((request, response) => {
 
                                 return;
                             }
-                            console.log(resultado);
 
                             const ids_fotos = {
                                 "ids": []
@@ -106,13 +108,45 @@ const server = http.createServer((request, response) => {
                             response.end(JSON.stringify(ids_fotos));
                             mysql.end();
                         })
-                    }            
+                    }
+                    else if(request.url.startsWith("/obtener_foto_muro_")){
+                        const id = request.url.replace("/obtener_foto_muro_", "");
+                        mysql.query("SELECT imagen FROM fotos WHERE id=" + id,(err, resultado) => {
+                            if(err){
+                                console.log(err);
+                                mysql.end();
+
+                                response.statusCode = 400;
+                                response.setHeader('Content-Type', 'application/json');
+                                response.end(JSON.stringify({
+                                    mensaje: "No pude obtener una imagen con este id"
+                                }));
+                                return;
+                            }
+                            if(resultado.length == 0){
+                                response.statusCode = 404;
+                                response.setHeader('Content-Type', 'application/json');
+                                response.end(JSON.stringify({
+                                    mensaje: "No hay imagen con ese id"
+                                }));
+                                return;
+                            }
+                            /*const respuesta = {
+                                imagen: "data:;base64" + resultado[0].imagen.toString("base64")
+                            }*/
+
+                            response.statusCode = 200;
+                            response.end(resultado[0].imagen);
+                            mysql.end();
+                        });
+                    }           
                 break;
             }
             
             
         break;
         case "POST":
+            console.log("Intenatmos iniciar sesion");
             
         break;
         case "PUT":
