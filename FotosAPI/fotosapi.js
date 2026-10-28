@@ -146,7 +146,56 @@ const server = http.createServer((request, response) => {
             
         break;
         case "POST":
-            console.log("Intenatmos iniciar sesion");
+            var informacion = "";
+            request.on("data", info => {
+                informacion += info;
+            });
+            request.on("end", () => {
+                switch(request.url){
+                
+                    case "/login":
+                        //console.log("intentamos iniciar sesion");
+                        const login = JSON.parse(informacion);                        
+
+                        mysql.query("SELECT nombre FROM usuarios WHERE (nombre = '" + login.usuario + "' AND contrasena = '"+ login.contrasena +"') OR (correo = '"+ login.usuario+ "' AND contrasena = '"+login.contrasena+"')", (err, resultado) => {
+                            if(err){
+                                mysql.end();
+                                console.log("hay un error");
+                                response.statusCode = 400;
+                                response.setHeader('Content-Type', 'application/json');
+                                response.end(JSON.stringify({
+                                    mensaje: "Algo fallo, informacion erronea"
+                                }));
+                                return;
+                            }
+
+
+                            if(resultado.length == 0){
+                                mysql.end();
+                                console.log("Usuario o contraseña incorrecto");
+                                response.statusCode = 404;
+                                response.setHeader('Content-Type', 'application/json');
+                                response.end(JSON.stringify({
+                                    mensaje: "Usuario o contraseña incorrecto"
+                                }));
+                                return;
+                            }
+
+                            const token = jwt.sign({username: resultado[0].nombre}, llave, {expiresIn: "30s"});
+
+                            mysql.end();
+                            response.statusCode = 200;
+                            response.setHeader('Content-Type', 'application/json');
+                            response.end(JSON.stringify({
+                                mensaje: "Login exitoso",
+                                token: token
+                            }));
+
+                        });
+                    break;
+                }
+            });
+            
             
         break;
         case "PUT":
