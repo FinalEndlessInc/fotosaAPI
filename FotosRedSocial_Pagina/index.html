@@ -27,8 +27,8 @@
 
             <div id="ListaDesplegable">
                 <ul>
-                    <li id="BotonVerMiPerfil">Ver mi Muro</li>
-                    <li>Cerrar sesión</li>
+                    <li id="BotonVerMiPerfil" onclick="VerMiMuro()">Ver mi Muro</li>
+                    <li onclick="CerrarSesion()">Cerrar sesión</li>
                 </ul>
             </div>
         </div>
@@ -41,7 +41,7 @@
             <input type="password" id="Input_Contrasena"/>
             <div id="IniciarSesionBotones">
                 <button onclick="HacerLogin()">Iniciar Sesión</button>
-                <button>Registrarse</button>
+                <button onclick="window.location.href = 'registro.html'">Registrarse</button>
             </div>
         </div>
     </nav>

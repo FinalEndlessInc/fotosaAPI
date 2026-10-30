@@ -9,6 +9,9 @@ const puerto = 3000;
 const server = http.createServer((request, response) => {
     response.setHeader("Access-Control-Allow-Origin", "*");
     response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    response.setHeader("Access-Control-Allow-Headers", "*");
+
+    const token = request.headers['authorization'];
 
     const mysql = basesdatos.createConnection({
         host: "localhost",
@@ -39,6 +42,58 @@ const server = http.createServer((request, response) => {
 
                     mysql.end();
                 });
+                break;
+
+                case "/obtener_usuario":
+                    console.log(request.headers.authorization);
+                    if(!token || token == null || token == "null" || token == undefined){
+                        //console.log(err);
+                        response.statusCode = 401;
+                        response.setHeader('Content-Type', 'application/json');
+                        response.end(JSON.stringify({
+                            mensaje: "Token no proporcionado"
+                        }));
+                        mysql.end();
+                        return;
+                    }
+
+                    jwt.verify(token, llave, (err, decoded) => {
+                        if(err){
+                            console.log(err);
+                                response.statusCode = 401;
+                                response.setHeader('Content-Type', 'application/json');
+                                response.end(JSON.stringify({
+                                    mensaje: "Token invalido"
+                                }));
+                                mysql.end();
+                                return;
+                        }
+                        console.log(decoded);
+                        mysql.query("SELECT id, imagen FROM usuarios WHERE nombre = '" + decoded.username +"'", (err, resultado) => {
+                            if(err){
+                                response.statusCode = 400;
+                                response.setHeader('Content-Type', 'application/json');
+                                response.end(JSON.stringify({
+                                    mensaje: "Algó salio mal"
+                                }));
+                                mysql.end();
+                                return;
+                            }
+                            const objeto_respuesta = {
+                                id: resultado[0].id,
+                                usuario: decoded.username,
+                                imagen: "data:;base64," + resultado[0].imagen.toString("base64")
+                            }
+
+                            //console.log(objeto_respuesta);
+
+                            response.statusCode = 200;
+                            response.setHeader('Content-Type', 'application/json');
+                            response.end(JSON.stringify(objeto_respuesta));
+
+                            mysql.end();
+                        });
+                    });
                 break;
 
                 default:
