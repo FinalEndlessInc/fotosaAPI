@@ -17,7 +17,7 @@ const server = http.createServer((request, response) => {
         host: "localhost",
         user: "root",
         password: "",
-        database: "fotoredsocial2"
+        database: "fotosredsocial2"
     });
     
     switch(request.method){
@@ -241,7 +241,7 @@ const server = http.createServer((request, response) => {
                                 return;
                             }
 
-                            const token = jwt.sign({username: resultado[0].nombre}, llave, {expiresIn: "30s"});
+                            const token = jwt.sign({username: resultado[0].nombre}, llave, {expiresIn: "1h"});
 
                             mysql.end();
                             response.statusCode = 200;
@@ -357,6 +357,25 @@ const server = http.createServer((request, response) => {
                                     mysql.end();
                                     return;
                                 }
+
+                                const imagen_binario = Buffer.from(nueva_imagen.imagen.split(",")[1], "base64");
+
+                                mysql.query("INSERT INTO fotos (imagen, id_usuario) VALUES (?,?)", [imagen_binario, resultado[0].id], (err, resultado2) => {
+                                    if(err){
+                                        console.log(err);
+                                        mysql.end();
+                                        return;
+                                    }
+
+                                    mysql.end();
+                                    response.statusCode = 201;
+                                    response.setHeader('Content-Type', 'application/json');
+                                    response.end(JSON.stringify({
+                                        mensaje: "Imágen agregada al muro",
+                                    
+                                    }));
+                                    return;
+                                });
                             });
                         });
 

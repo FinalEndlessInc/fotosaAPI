@@ -70,5 +70,14 @@ function AgregarNuevaFoto(){
         headers: {
             Authorization: sessionStorage.getItem("token_sesion")
         }
+    }).then(recurso => {
+        recurso.json().then(respuesta => {
+            if(recurso.status != 201){
+                alert(respuesta.mensaje);
+                return;
+            }
+            alert(respuesta.mensaje);
+            window.location.reload();
+        })
     });
 }
