@@ -18,7 +18,16 @@ Input_Imagen.addEventListener("change", function(){
     }
 });
 
-/*
+Input_Fondo.addEventListener("change", function(){
+    const archivo = Input_Fondo.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(archivo);
+    reader.onload = function(){
+        PreviewImagenFondo.src = reader.result;
+    }
+});
+
+
 function Registrarse(){
     if(Input_Contrasena.value != Input_ContrasenaConfirmacion.value){
         alert("Las contraseñas no coinciden");
@@ -28,6 +37,23 @@ function Registrarse(){
     const objeto_usuario = {
         nombre: Input_Nombre.value,
         correo: Input_Correo.value,
-        contrasena: Input_Contrasena.value
+        contrasena: Input_Contrasena.value,
+        imagen: PreviewImagenPerfil.src,
+        fondo: PreviewImagenFondo.src,
+        fondo_cover: Fondo_Cover.checked
     }
-}*/
+
+    fetch(url_endpoint + "/registro", {
+        method: "POST",
+        body: JSON.stringify(objeto_usuario)
+    }).then(recurso => {
+        recurso.json().then(respuesta => {
+            if(recurso.status == 200){
+                alert(respuesta.mensaje);
+                window.location.href = "index.html";
+                return;
+            }
+            alert(respuesta.mensaje);
+        });
+    });
+}

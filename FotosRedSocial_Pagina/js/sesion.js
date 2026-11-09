@@ -10,6 +10,8 @@ const SeccionSesionIniciada = document.querySelector("#SeccionSesionIniciada");
 const TextoMiPerfil = SeccionSesionIniciada.querySelector("#TextoMiPerfil");
 const ImagenPerfil = SeccionSesionIniciada.querySelector("img");
 
+var funcion_iniciar_sesion = null;
+
 function HacerLogin(){
     const objeto = {
         usuario: Input_Usuario.value,
@@ -43,9 +45,15 @@ function ObtenerUsuario(){
     }).then(recurso => {
         recurso.json().then(respuesta => {
             if(recurso.status != 200){
-                alert(respuesta.mensaje);
+                //alert(respuesta.mensaje);
+
                 return;
             }
+
+            if(funcion_iniciar_sesion != null){
+                funcion_iniciar_sesion(respuesta.id);
+            }
+
             SeccionIniciarSesion.remove();
             SeccionSesionIniciada.style.display = "block";
 

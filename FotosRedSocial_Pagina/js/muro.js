@@ -33,3 +33,42 @@ fetch(url_endpoint + "/obtener_id_fotos_" + sessionStorage.getItem("muro_objetiv
         });
     }
 });
+
+const SeccionAgregarFoto = document.querySelector("#SeccionAgregarFoto");
+const Campo_SubirNuevaFoto = document.querySelector("#Campo_SubirNuevaFoto");
+const Preview_SubirNuevaFoto = document.querySelector("#Preview_SubirNuevaFoto");
+
+Campo_SubirNuevaFoto.addEventListener("change", () => {
+    const archivo = Campo_SubirNuevaFoto.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(archivo);
+    reader.onload = function(){
+        Preview_SubirNuevaFoto.src = reader.result;
+    }
+});
+
+funcion_iniciar_sesion = function(id_usuario){
+    if(id_usuario == sessionStorage.getItem("muro_objetivo")){
+        SeccionAgregarFoto.style.display = "block";
+    }
+}
+
+/*
+fetch(url_endpoint + "/poder_subir_foto", {
+    method: "GET",
+    headers: {
+        Authorization: sessionStorage.getItem("token_sesion")
+    }
+});*/
+
+function AgregarNuevaFoto(){
+    fetch(url_endpoint + "/agregar_foto_a_muro", {
+        method: "POST",
+        body: JSON.stringify({
+            imagen: Preview_SubirNuevaFoto.src
+        }),
+        headers: {
+            Authorization: sessionStorage.getItem("token_sesion")
+        }
+    });
+}

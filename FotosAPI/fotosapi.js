@@ -17,7 +17,7 @@ const server = http.createServer((request, response) => {
         host: "localhost",
         user: "root",
         password: "",
-        database: "mi_fotoredsocial"
+        database: "fotoredsocial2"
     });
     
     switch(request.method){
@@ -124,8 +124,13 @@ const server = http.createServer((request, response) => {
                             const perfil = {
                                 nombre: respuesta[0].nombre,
                                 imagen: "data:;base64," + respuesta[0].imagen.toString("base64"),
-                                fondo: "data:;base64," + respuesta[0].fondo.toString("base64"),
                                 fondo_cover: respuesta[0].fondo_cover
+                            }
+
+                            if(respuesta[0].fondo == null){
+                                perfil.fondo = null
+                            }else{
+                                perfil.fondo = "data:;base64," + respuesta[0].fondo.toString("base64")
                             }
 
                             response.statusCode = 200;
@@ -247,6 +252,114 @@ const server = http.createServer((request, response) => {
                             }));
 
                         });
+                    break;
+
+                    case "/registro":
+                        const objeto_registro = JSON.parse(informacion);
+                        
+                        mysql.query("SELECT correo FROM usuarios WHERE (correo = '"+ objeto_registro.correo + "') OR (nombre = '"+ objeto_registro.nombre +"') ", (err, resultado) => {
+                            if(err){
+                                mysql.end();
+                                response.statusCode = 400;
+                                response.setHeader('Content-Type', 'application/json');
+                                response.end(JSON.stringify({
+                                    mensaje: "Error en la consulta",
+                                }));
+                                return;
+                            }
+
+                            if(resultado.length != 0){
+                                mysql.end()
+                                response.statusCode = 400;
+                                response.setHeader('Content-Type', 'application/json');
+                                response.end(JSON.stringify({
+                                    mensaje: "Correo o nombre proporcionado ya registrado en la base de datos",
+                                
+                                }));
+                                return;
+                            }
+
+                            var imagen_binario;
+                            var fondo_binario;
+
+                            try{
+                                imagen_binario = Buffer.from(objeto_registro.imagen.split(',')[1], "base64");
+
+                                if(objeto_registro.fondo == ""){
+                                    fondo_binario = null;
+                                }else{
+                                    fondo_binario = Buffer.from(objeto_registro.fondo.split(',')[1], "base64");
+                                }
+                            }catch(err){
+                                console.log(err);
+                                mysql.end();
+                                response.statusCode = 400;
+                                response.setHeader('Content-Type', 'application/json');
+                                response.end(JSON.stringify({
+                                    mensaje: "Error con las imagenes que se mandaron",
+                                
+                                }));
+                                return;
+                            }
+
+
+                            mysql.query("INSERT INTO usuarios (nombre, correo, contrasena, imagen, fondo, fondo_cover) VALUES (?,?,?,?,?,?)", [objeto_registro.nombre, objeto_registro.correo, objeto_registro.contrasena, imagen_binario, fondo_binario, objeto_registro.fondo_cover], (err, resultado) => {
+                                if(err){
+                                    console.log(err);
+                                    mysql.end();
+                                    response.statusCode = 400;
+                                    response.setHeader('Content-Type', 'application/json');
+                                    response.end(JSON.stringify({
+                                        mensaje: "Ocurrió un error al intentar registrarse",
+                                    
+                                    }));
+                                    return;
+                                }
+                                mysql.end()
+                                response.statusCode = 200;
+                                response.setHeader('Content-Type', 'application/json');
+                                response.end(JSON.stringify({
+                                    mensaje: "Usuario creado correctamente"
+                                }));
+                                return;
+                            });
+                        });
+                    break;
+
+                    case "/agregar_foto_a_muro":
+                        const nueva_imagen = JSON.parse(informacion);
+                        
+                        if(!token || token == null || token == "null" || token == undefined){
+                            mysql.end();
+                            response.statusCode = 400;
+                            response.setHeader('Content-Type', 'application/json');
+                            response.end(JSON.stringify({
+                                mensaje: "Token no proporcionado",
+                            }));
+                            return;
+                        }
+
+                        jwt.verify(token, llave, (err, decoded) => {
+                            if(err){
+                                mysql.end();
+                                response.statusCode = 400;
+                                response.setHeader('Content-Type', 'application/json');
+                                response.end(JSON.stringify({
+                                    mensaje: "Ocurrió un error al intentar registrarse",
+                                
+                                }));
+                                return;
+                            }
+
+                            mysql.query("SELECT id FROM usuarios WHERE nombre = ?", [decoded.username], (err, resultado) => {
+                                if(err){
+                                    console.log(err);
+                                    mysql.end();
+                                    return;
+                                }
+                            });
+                        });
+
                     break;
                 }
             });
