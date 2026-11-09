@@ -328,6 +328,16 @@ const server = http.createServer((request, response) => {
 
                     case "/agregar_foto_a_muro":
                         const nueva_imagen = JSON.parse(informacion);
+
+                        if(nueva_imagen.imagen == "" || nueva_imagen.imagen == null || nueva_imagen.imagen == "null" || nueva_imagen.imagen == undefined){
+                            mysql.end();
+                            response.statusCode = 400;
+                            response.setHeader('Content-Type', 'application/json');
+                            response.end(JSON.stringify({
+                                mensaje: "No hay imagen, wey",
+                            }));
+                            return;
+                        }
                         
                         if(!token || token == null || token == "null" || token == undefined){
                             mysql.end();
@@ -358,8 +368,21 @@ const server = http.createServer((request, response) => {
                                     return;
                                 }
 
-                                const imagen_binario = Buffer.from(nueva_imagen.imagen.split(",")[1], "base64");
+                                var imagen_binario;
 
+                                try{
+                                    imagen_binario = Buffer.from(nueva_imagen.imagen.split(",")[1], "base64");
+                                }catch(error){
+                                    mysql.end();
+                                    response.statusCode = 400;
+                                    response.setHeader('Content-Type', 'application/json');
+                                    response.end(JSON.stringify({
+                                        mensaje: "La imagen no es válida",
+                                    
+                                    }));
+                                    return;
+                                }
+                                
                                 mysql.query("INSERT INTO fotos (imagen, id_usuario) VALUES (?,?)", [imagen_binario, resultado[0].id], (err, resultado2) => {
                                     if(err){
                                         console.log(err);
